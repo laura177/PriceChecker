@@ -5,7 +5,7 @@ import GroceryMenu from './GroceryMenu';
 
 export default function App() {
   return (
-    <View>
+    <View style={styles.container}>
       <GroceryMenu />
       <StatusBar style="auto" />
     </View>
@@ -15,8 +15,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#rgba(244, 225, 235, 0.8)',
     alignItems: 'center',
     justifyContent: 'center',
+
   },
 });

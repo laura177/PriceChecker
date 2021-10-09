@@ -7,6 +7,7 @@ import {
   Pressable,
   StyleSheet,
   Alert,
+  TextInput,
 } from "react-native";
 
 const foods = [
@@ -45,7 +46,10 @@ export default class GroceryMenu extends React.Component {
     super();
     this.state = {
       modalVisible: false,
-      addedFood: [],
+      addedFood: "",
+      addedFoodPrice: "",
+      addedFoodQty: "",
+      food: []
     };
     this.renderModal = this.renderModal.bind(this);
   }
@@ -53,6 +57,9 @@ export default class GroceryMenu extends React.Component {
   onAddItem = () => {
     this.setState({ ...this.state, modalVisible: true });
   };
+  onSubmit = () => {
+    this.setState({ food: []})
+  }
 
   render() {
     const { modalVisible } = this.state;
@@ -62,14 +69,16 @@ export default class GroceryMenu extends React.Component {
         <View style={styles.tableHeader}>
           <Text style={styles.itemColumn}>Item</Text>
           <Text style={styles.priceColumn}>Price</Text>
+          <Text style={styles.qtyColumn}>Qty</Text>
         </View>
         <View>
             {foods.map((item) => {
                 if(item.name.length) {
                     return (
-                        <View style={styles.tableRow}>
+                        <View key={item.id} style={styles.tableRow}>
                         <Text style={styles.item}>{item.name}</Text>
-                        <Text style={styles.price}>{item.price}</Text>
+                        <Text style={styles.item}>{item.price}</Text>
+                        <Text style={styles.item}>1</Text>
                         </View>
                     )
                 }
@@ -98,22 +107,35 @@ export default class GroceryMenu extends React.Component {
         style={styles.modalView}
       >
           <View>
-
-        <Text>Modal is visible!</Text>
+        <Text>Enter Barcode Number</Text>
+            <TextInput style={styles.modalInput} placeholder='1234' placeholderTextColor="#aaaaaa" />
           </View>
         <Pressable
           onPress={() => {
+            if(this.state)
             this.setState({
               ...this.state,
-              newFood: "",
-              newExpiration: "",
+              addedFood: "",
+              addedFoodPrice: "",
               noFoodError: false,
               modalVisible: !this.state.modalVisible,
             });
           }}
         >
-          <Text>Cancel</Text>
+          <Text>Submit</Text>
         </Pressable>
+        <Pressable
+        onPress={() => {
+          this.setState({
+            ...this.state,
+            addedFood: "",
+            addedFoodPrice: "",
+            noFoodError: false,
+            modalVisible: !this.state.modalVisible,
+          });
+        }}>
+          <Text>Cancel</Text>
+          </Pressable>
       </Modal>
     );
   };
@@ -142,9 +164,10 @@ const styles = StyleSheet.create({
   },
   tableRow: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    alignContent: "space-between",
     marginTop: 10,
     marginBottom: 5,
+    gap: 5
   },
   itemColumn: {
     fontSize: 20,
@@ -156,6 +179,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginRight: 90,
   },
+  qtyColumn: {
+    fontSize: 20,
+    flexDirection: "column",
+    marginRight: 10
+  },
   item: {
     width: 150,
     flexDirection: "column",
@@ -166,10 +194,11 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#b2e4db',
     borderRadius: 10,
+    borderColor: 'black',
     padding: 50,
-    shadowColor: '#000',
+    shadowColor: '#a76d60',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -178,5 +207,18 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 20,
     marginTop: '40%',
+  },
+  modalInput: {
+    height: 48,
+    borderRadius: 5,
+    borderWidth: 0.5,
+    borderColor: 'black',
+    overflow: 'hidden',
+    backgroundColor: 'white',
+    marginTop: 10,
+    marginBottom: 5,
+    marginLeft: 30,
+    marginRight: 30,
+    paddingLeft: 16,
   },
 });
