@@ -35,12 +35,13 @@ export default class GroceryMenu extends React.Component {
   onSubmit = () => {
     this.setState({ food: []})
   }
-  // enterBarCode = (code) => {
-  //   if(code === foods.id){
-  //     this.state.foodName = foods.name
-  //     this.state.price = foods.price
-  //   }
-  // }
+  enterBarCode = (code) => {
+    if(code === this.props.foods.id){
+      this.state.foodName = this.props.foods.name
+      this.state.price = this.props.foods.price
+      this.state.quantity = 1
+    }
+  }
 
   render() {
     console.log("PROPS>>>", this.props)

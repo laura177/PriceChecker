@@ -10,28 +10,30 @@ import {
   TextInput,
   Button
 } from "react-native";
+import foods from './sampleData/foods'
 
 
 const GroceryList = (props) => {
-    const [quantity, setQuantity] = useState(1);
-    const [item, setItem] = useState([]);
+    const [items, setItems] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
-    const [inputtedCode, setInputtedCode] = useState('')
+    const [inputtedCode, setInputtedCode] = useState('');
 
-    const increaseQuantity = (index) => {
-        const currentItems = [...item];
-
-
+    const handleItemSubmit = () => {
+        const foundItem = foods.find(item => inputtedCode === item.id);
+        foundItem.quantity = 1;
+        const newItems = [...items, foundItem];
+        console.log("handle items submit", newItems)
+        setItems(newItems);
     }
-    //currently just have all 3 food items from sample
-    //data rendered on page, but I want to add each item to item state array, 
-    //with quantity key value default to 1
-    //
-    //need to enter ID number into text input, then check if it matches ID in foods data,
-    //then add to item state
 
-    //{name: , price: , quantity: }
-    console.log("PROPS?!?", props)
+    const handleIncreaseQty = (id) => {
+        const foundItem = items.find(item => id === item.id);
+        foundItem.quantity++
+        const newItems = [...items]
+        setItems(newItems)
+    }
+
+    console.log({items, modalVisible, inputtedCode})
     return (
         <>
     <View style={styles.container}>
@@ -42,35 +44,26 @@ const GroceryList = (props) => {
           <Text style={styles.qtyColumn}>Qty</Text>
         </View>
         <View style={styles.container}>
-          {item.map((item) => {
-              if(item.name.length) {
+          {items.map((item) => {
                 return (
                     <View key={item.id} style={styles.tableRow}>
                     <Text style={styles.item}>{item.name}</Text>
                     <Text style={styles.item}>{item.price}</Text>
-                    <Text style={styles.item}>{quantity}</Text>
-                    <Button title="+" onPress={() => Alert.alert("button pressed")}/>
+                    <Text style={styles.item}>{item.quantity}</Text>
+                    <Button title="+" onPress={() => handleIncreaseQty(item.id)}/>
                     <Button title="-" />
                     </View>
                 )
-            }
           })}
         </View>
         <View style={styles.inputContainer}>
-        <TextInput 
-            style={styles.input}
-            value={inputtedCode}
-            placeholder='1234'
-            placeholderTextColor="#aaaaaa"
-            keyboardType="number-pad"
-            maxLength="4"
-            onChangeText={code => setInputtedCode(code)}/>
         <Button title="Add Item" onPress={(code) => {
             setItem(props.food)
         }}/>
         </View>
-        
-        {/* <Modal animationType="fade"
+        <View>
+
+        <Modal animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -85,14 +78,21 @@ const GroceryList = (props) => {
             placeholderTextColor="#aaaaaa"
             keyboardType="number-pad"
             maxLength="4"
+            value={inputtedCode}
+            onChangeText={setInputtedCode}
             />
+            <TouchableOpacity onPress={handleItemSubmit}>
+                <Text>Submit</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setModalVisible(!modalVisible)}
             >
               <Text>Cancel</Text>
             </TouchableOpacity>
           </View>
-        </Modal> */}
+        </Modal>
+        </View>
+        
         
 
     </View>
