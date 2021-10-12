@@ -8,51 +8,26 @@ import {
   StyleSheet,
   Alert,
   TextInput,
+  Button
 } from "react-native";
 
-const foods = [
-  {
-    id: "0001",
-    qrUrl:
-      "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=0001",
-    thumbnail:
-      "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/appl e/237/banana_1f34c.png",
-    name: "Banana",
-    price: "$1.00",
-  },
-  {
-    id: "0002",
-    qrUrl:
-      "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=0002",
-
-    thumbnail:
-      "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/appl e/237/red-apple_1f34e.png",
-    name: "Apple",
-    price: "$4.00",
-  },
-  {
-    id: "0003",
-    qrUrl:
-      "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=0003",
-    thumbnail:
-      "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/appl e/237/sparkles_2728.png",
-    name: "Other Stuff",
-    price: "$10.00",
-  },
-];
-
 export default class GroceryMenu extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       modalVisible: false,
-      addedFood: "",
-      addedFoodPrice: "",
-      addedFoodQty: "",
-      food: []
+      foodName: '',
+      price: '',
+      quantity: '',
+      code: ''
     };
     this.renderModal = this.renderModal.bind(this);
+    // this.enterBarCode = this.enterBarCode.bind(this);
   }
+
+  // componentDidUpdate(prevProps){
+    
+  // }
 
   onAddItem = () => {
     this.setState({ ...this.state, modalVisible: true });
@@ -60,9 +35,19 @@ export default class GroceryMenu extends React.Component {
   onSubmit = () => {
     this.setState({ food: []})
   }
+  // enterBarCode = (code) => {
+  //   if(code === foods.id){
+  //     this.state.foodName = foods.name
+  //     this.state.price = foods.price
+  //   }
+  // }
 
   render() {
+    console.log("PROPS>>>", this.props)
     const { modalVisible } = this.state;
+    // const foodName = this.state.addedFoodItem.foodName
+    // const price = this.state.addedFoodItem.price
+    // const quantity = this.state.addedFoodItem.quantity
     return (
       <View style={styles.container}>
         <Text style={styles.header}>Price Checker</Text>
@@ -72,13 +57,15 @@ export default class GroceryMenu extends React.Component {
           <Text style={styles.qtyColumn}>Qty</Text>
         </View>
         <View>
-            {foods.map((item) => {
+            {this.props.foods.map((item) => {
                 if(item.name.length) {
                     return (
                         <View key={item.id} style={styles.tableRow}>
                         <Text style={styles.item}>{item.name}</Text>
                         <Text style={styles.item}>{item.price}</Text>
                         <Text style={styles.item}>1</Text>
+                        <Button title="+" color={'#6b818c'}/>
+                        <Button title="-" color={'#6b818c'}/>
                         </View>
                     )
                 }
@@ -108,18 +95,24 @@ export default class GroceryMenu extends React.Component {
       >
           <View>
         <Text>Enter Barcode Number</Text>
-            <TextInput style={styles.modalInput} placeholder='1234' placeholderTextColor="#aaaaaa" />
+            <TextInput style={styles.modalInput}
+            placeholder='1234'
+            placeholderTextColor="#aaaaaa"
+            keyboardType="number-pad"
+            maxLength="4"
+            value={this.state.code}
+            onChangeText={() => {
+              if(this.state.code === this.props.foods.id){
+                this.setState({foodName: this.props.foods.name, price: this.props.foods.price, quantity: 1})
+              }
+            }}/>
           </View>
         <Pressable
           onPress={() => {
-            if(this.state)
-            this.setState({
-              ...this.state,
-              addedFood: "",
-              addedFoodPrice: "",
-              noFoodError: false,
-              modalVisible: !this.state.modalVisible,
-            });
+              this.setState({
+                ...this.state,
+                modalVisible: !this.state.modalVisible,
+              })
           }}
         >
           <Text>Submit</Text>
@@ -128,9 +121,7 @@ export default class GroceryMenu extends React.Component {
         onPress={() => {
           this.setState({
             ...this.state,
-            addedFood: "",
-            addedFoodPrice: "",
-            noFoodError: false,
+            quantity: 1,
             modalVisible: !this.state.modalVisible,
           });
         }}>
@@ -164,28 +155,28 @@ const styles = StyleSheet.create({
   },
   tableRow: {
     flexDirection: "row",
-    alignContent: "space-between",
+    alignContent: "space-evenly",
     marginTop: 10,
     marginBottom: 5,
     gap: 5
   },
   itemColumn: {
     fontSize: 20,
-    width: 150,
+    width: 200,
     flexDirection: "column",
   },
   priceColumn: {
     fontSize: 20,
     flexDirection: "column",
-    marginRight: 90,
+    marginRight: 110,
   },
   qtyColumn: {
     fontSize: 20,
     flexDirection: "column",
-    marginRight: 10
+    marginRight: 5
   },
   item: {
-    width: 150,
+    width: 100,
     flexDirection: "column",
   },
   column: {
@@ -194,16 +185,16 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: '#b2e4db',
+    backgroundColor: '#D3EAEE',
     borderRadius: 10,
     borderColor: 'black',
     padding: 50,
-    shadowColor: '#a76d60',
+    shadowColor: '#6B818C',
     shadowOffset: {
-      width: 0,
-      height: 2,
+      width: 2,
+      height: 6,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 20,
     marginTop: '40%',

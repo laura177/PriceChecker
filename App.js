@@ -2,20 +2,45 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import GroceryMenu from './GroceryMenu';
+import GroceryList from './GroceryList';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <GroceryMenu />
-      <StatusBar style="auto" />
-    </View>
-  );
+export default class App extends React.Component {
+  render(){
+    const foods = [
+      {
+      "id": "0001", "qrUrl":
+      "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=0001", "thumbnail":
+      "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/appl e/237/banana_1f34c.png",
+      "name": "Banana",
+      "price": "$1.00" },
+      {
+      "id": "0002", "qrUrl":
+      "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=0002",
+        
+      "thumbnail": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/appl e/237/red-apple_1f34e.png",
+      "name": "Apple",
+      "price": "$4.00" },
+      {
+      "id": "0003", "qrUrl":
+      "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=0003", "thumbnail":
+      "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/appl e/237/sparkles_2728.png",
+      "name": "Other Stuff",
+      "price": "$10.00" }
+      ]
+    return (
+      <View style={styles.container}>
+        <GroceryMenu foods={foods}/>
+        {/* <GroceryList foods={foods} /> */}
+        <StatusBar style="auto" />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#rgba(244, 225, 235, 0.8)',
+    backgroundColor: '#D3EAEE',
     alignItems: 'center',
     justifyContent: 'center',
 
