@@ -22,12 +22,8 @@ export default class GroceryMenu extends React.Component {
       code: ''
     };
     this.renderModal = this.renderModal.bind(this);
-    // this.enterBarCode = this.enterBarCode.bind(this);
   }
 
-  // componentDidUpdate(prevProps){
-    
-  // }
 
   onAddItem = () => {
     this.setState({ ...this.state, modalVisible: true });

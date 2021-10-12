@@ -22,16 +22,36 @@ const GroceryList = (props) => {
         const foundItem = foods.find(item => inputtedCode === item.id);
         foundItem.quantity = 1;
         const newItems = [...items, foundItem];
-        console.log("handle items submit", newItems)
         setItems(newItems);
     }
 
     const handleIncreaseQty = (id) => {
         const foundItem = items.find(item => id === item.id);
-        foundItem.quantity++
-        const newItems = [...items]
-        setItems(newItems)
+        foundItem.quantity++;
+        const newItems = [...items];
+        setItems(newItems);
     }
+
+    const handleDecreaseQty = (id) => {
+        const foundItem = items.find(item => id === item.id);
+        foundItem.quantity--;
+        const newItems = [...items];
+        setItems(newItems);
+    }
+
+   const calculateTotal = () => {
+       let totalSum = 0
+       for(let i = 0; i < items.length; i++){
+           let currentItem = items[i];
+           console.log(typeof(Number(currentItem.price)))
+           let convertPrice = Number(currentItem.price)
+           totalSum += (convertPrice * currentItem.quantity)
+           console.log("total sum", totalSum)
+        }
+        return totalSum
+    }
+    const total = items.length === 0 ? 0 : calculateTotal()
+    console.log("TOTAL", total)
 
     console.log({items, modalVisible, inputtedCode})
     return (
@@ -50,16 +70,14 @@ const GroceryList = (props) => {
                     <Text style={styles.item}>{item.name}</Text>
                     <Text style={styles.item}>{item.price}</Text>
                     <Text style={styles.item}>{item.quantity}</Text>
-                    <Button title="+" onPress={() => handleIncreaseQty(item.id)}/>
-                    <Button title="-" />
+                    <Button title="+" color={'#6b818c'} onPress={() => handleIncreaseQty(item.id)}/>
+                    <Button title="-" color={'#6b818c'} onPress={() => handleDecreaseQty(item.id)}/>
                     </View>
                 )
           })}
         </View>
         <View style={styles.inputContainer}>
-        <Button title="Add Item" onPress={(code) => {
-            setItem(props.food)
-        }}/>
+        <Button title="Add Item" color={'#6b818c'} style={styles.addItemButton}/>
         </View>
         <View>
 
@@ -72,7 +90,7 @@ const GroceryList = (props) => {
         }}
         style={styles.modalView}>
             <View>
-        <Text>Enter Barcode Number</Text>
+        <Text style={styles.modalText}>Enter Barcode Number</Text>
             <TextInput style={styles.modalInput}
             placeholder='1234'
             placeholderTextColor="#aaaaaa"
@@ -81,14 +99,8 @@ const GroceryList = (props) => {
             value={inputtedCode}
             onChangeText={setInputtedCode}
             />
-            <TouchableOpacity onPress={handleItemSubmit}>
-                <Text>Submit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text>Cancel</Text>
-            </TouchableOpacity>
+            <Button title="Submit" color={'#6b818c'} onPress={handleItemSubmit}/>
+            <Button title="Cancel" color={'#6b818c'} onPress={() => setModalVisible(!modalVisible)}/>
           </View>
         </Modal>
         </View>
@@ -97,16 +109,10 @@ const GroceryList = (props) => {
 
     </View>
     <View>
-        <Text style={styles.total}>Total: </Text>
+        <Text style={styles.total}>Total: ${total}</Text>
     </View>
     </>
     )
-}
-
-const mapStateToProps = (state) => {
-    return {
-        testItems: state.test
-    }
 }
 
 const styles = StyleSheet.create({
@@ -163,7 +169,7 @@ const styles = StyleSheet.create({
     },
     column: {
       flexDirection: "column",
-      marginRight: 90
+      marginVertical: 40
     },
     modalView: {
       margin: 20,
@@ -213,6 +219,17 @@ const styles = StyleSheet.create({
     },
     total: {
         marginBottom: 200
+    },
+    addItemButton: {
+        marginBottom: 140
+    },
+    modalButtons: {
+        borderColor: 'black',
+        borderWidth: 2
+    },
+    modalText: {
+        flex: 1,
+        alignItems: "center"
     }
   });
   
