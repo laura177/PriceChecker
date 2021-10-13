@@ -1,10 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import {
   Text,
-  TouchableOpacity,
   View,
   Modal,
-  Pressable,
   StyleSheet,
   Alert,
   TextInput,
@@ -43,17 +41,21 @@ const GroceryList = (props) => {
        let totalSum = 0
        for(let i = 0; i < items.length; i++){
            let currentItem = items[i];
-           console.log(typeof(Number(currentItem.price)))
-           let convertPrice = Number(currentItem.price)
-           totalSum += (convertPrice * currentItem.quantity)
-           console.log("total sum", totalSum)
+           console.log("type of Num(item.price)>> ", typeof(Number(currentItem.price)))
+           let convertPrice = parseInt(currentItem.price)
+           console.log("CURRENT QTY",currentItem.quantity)
+           console.log("MATH",convertPrice)
+           let mult = currentItem.price * currentItem.quantity
+           totalSum += mult
         }
         return totalSum
     }
+
     const total = items.length === 0 ? 0 : calculateTotal()
     console.log("TOTAL", total)
 
     console.log({items, modalVisible, inputtedCode})
+    console.log("calc total", calculateTotal())
     return (
         <>
     <View style={styles.container}>
@@ -76,10 +78,10 @@ const GroceryList = (props) => {
                 )
           })}
         </View>
+        <View>
         <View style={styles.inputContainer}>
         <Button title="Add Item" color={'#6b818c'} style={styles.addItemButton}/>
         </View>
-        <View>
 
         <Modal animationType="fade"
         transparent={true}
@@ -104,9 +106,6 @@ const GroceryList = (props) => {
           </View>
         </Modal>
         </View>
-        
-        
-
     </View>
     <View>
         <Text style={styles.total}>Total: ${total}</Text>
@@ -223,14 +222,6 @@ const styles = StyleSheet.create({
     addItemButton: {
         marginBottom: 140
     },
-    modalButtons: {
-        borderColor: 'black',
-        borderWidth: 2
-    },
-    modalText: {
-        flex: 1,
-        alignItems: "center"
-    }
   });
   
 export default GroceryList

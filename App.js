@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import GroceryMenu from './GroceryMenu';
 import GroceryList from './GroceryList';
 
 export default class App extends React.Component {
@@ -9,7 +8,6 @@ export default class App extends React.Component {
 
     return (
       <View style={styles.container}>
-        {/* <GroceryMenu foods={foods}/> */}
         <GroceryList />
         <StatusBar style="auto" />
       </View>
