@@ -11,7 +11,7 @@ import {
 import foods from './sampleData/foods'
 
 
-const GroceryList = (props) => {
+const GroceryList = () => {
     const [items, setItems] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [inputtedCode, setInputtedCode] = useState('');
@@ -41,21 +41,15 @@ const GroceryList = (props) => {
        let totalSum = 0
        for(let i = 0; i < items.length; i++){
            let currentItem = items[i];
-           console.log("type of Num(item.price)>> ", typeof(Number(currentItem.price)))
            let convertPrice = parseInt(currentItem.price)
-           console.log("CURRENT QTY",currentItem.quantity)
-           console.log("MATH",convertPrice)
-           let mult = currentItem.price * currentItem.quantity
+           let mult = convertPrice * currentItem.quantity
            totalSum += mult
         }
         return totalSum
     }
 
     const total = items.length === 0 ? 0 : calculateTotal()
-    console.log("TOTAL", total)
 
-    console.log({items, modalVisible, inputtedCode})
-    console.log("calc total", calculateTotal())
     return (
         <>
     <View style={styles.container}>
@@ -94,7 +88,7 @@ const GroceryList = (props) => {
             <View>
         <Text style={styles.modalText}>Enter Barcode Number</Text>
             <TextInput style={styles.modalInput}
-            placeholder='1234'
+            placeholder='0001'
             placeholderTextColor="#aaaaaa"
             keyboardType="number-pad"
             maxLength="4"
